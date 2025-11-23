@@ -1,0 +1,42 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### Compiled ###
+target/
+build/
+classes/
+*.class
+
+### Logs ###
+*.log
+logs/
+log/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### JVM Crash Logs ###
+hs_err_pid*
+replay_pid*
+
+### Maven Wrapper ###
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+### Spring Boot ###
+*.war
+*.jar
+
+### Temp and cache ###
+*.cache
+*.tmp
+*.swp
+
+### Environment ###
+.env
+.env.*

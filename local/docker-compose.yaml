@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: microbid_postgres
+    environment:
+      POSTGRES_DB: microbid
+      POSTGRES_USER: microuser
+      POSTGRES_PASSWORD: microsecret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
