@@ -27,11 +27,14 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
 
-    public void registerUser(RegisterRequest request) {
+    public LoginResponse registerUser(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new BusinessException("USER_ALREADY_EXISTS", "User with this email already exists");
         }
         userRepository.save(userMapper.mapUserFromRegisterRequest(request));
+        return LoginResponse.builder()
+                .token(jwtUtil.generateToken(request.getEmail()))
+                .build();
     }
 
     public LoginResponse login(LoginRequest request) {

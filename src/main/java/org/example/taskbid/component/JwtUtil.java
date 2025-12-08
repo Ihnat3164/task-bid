@@ -3,11 +3,13 @@ package org.example.taskbid.component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.*;
 
 
+@Slf4j
 @Component
 public class JwtUtil {
 

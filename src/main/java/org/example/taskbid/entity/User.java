@@ -7,25 +7,26 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "users")
 @Data
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "users")
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String username;
-    String email;
+    @Column(nullable = false, unique = true)
+    private String username;
 
-    @Column(name = "password_hash")
-    String password;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    String role;
+    @Column(name = "password_hash", nullable = false)
+    private String password;
 
-    @Column(name = "created_at")
-    LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 }
+

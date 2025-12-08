@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Начальные категории и навыки -->
+    <changeSet id="2" author="user">
+        <!-- Категории -->
+        <insert tableName="skill_categories"><column name="id" valueNumeric="1"/><column name="name" value="Уборка"/></insert>
+        <insert tableName="skill_categories"><column name="id" valueNumeric="2"/><column name="name" value="Перевозки"/></insert>
+        <insert tableName="skill_categories"><column name="id" valueNumeric="3"/><column name="name" value="Строительство и ремонт"/></insert>
+        <insert tableName="skill_categories"><column name="id" valueNumeric="4"/><column name="name" value="Сад и огород"/></insert>
+        <insert tableName="skill_categories"><column name="id" valueNumeric="5"/><column name="name" value="Транспорт и авто"/></insert>
+        <insert tableName="skill_categories"><column name="id" valueNumeric="6"/><column name="name" value="IT и техника"/></insert>
+        <insert tableName="skill_categories"><column name="id" valueNumeric="7"/><column name="name" value="Личные услуги"/></insert>
+
+        <!-- Навыки: Уборка -->
+        <insert tableName="skills"><column name="name" value="Мытьё окон"/><column name="category_id" valueNumeric="1"/></insert>
+        <insert tableName="skills"><column name="name" value="Подметание и мойка пола"/><column name="category_id" valueNumeric="1"/></insert>
+        <insert tableName="skills"><column name="name" value="Генеральная уборка"/><column name="category_id" valueNumeric="1"/></insert>
+        <insert tableName="skills"><column name="name" value="Уборка после ремонта"/><column name="category_id" valueNumeric="1"/></insert>
+        <insert tableName="skills"><column name="name" value="Стирка и глажка"/><column name="category_id" valueNumeric="1"/></insert>
+
+        <!-- Навыки: Перевозки -->
+        <insert tableName="skills"><column name="name" value="Перевозка мебели"/><column name="category_id" valueNumeric="2"/></insert>
+        <insert tableName="skills"><column name="name" value="Курьерская доставка"/><column name="category_id" valueNumeric="2"/></insert>
+        <insert tableName="skills"><column name="name" value="Помощь при переезде"/><column name="category_id" valueNumeric="2"/></insert>
+        <insert tableName="skills"><column name="name" value="Вывоз строительного мусора"/><column name="category_id" valueNumeric="2"/></insert>
+
+        <!-- Навыки: Строительство и ремонт -->
+        <insert tableName="skills"><column name="name" value="Сборка мебели"/><column name="category_id" valueNumeric="3"/></insert>
+        <insert tableName="skills"><column name="name" value="Ремонт квартир"/><column name="category_id" valueNumeric="3"/></insert>
+        <insert tableName="skills"><column name="name" value="Малярные работы"/><column name="category_id" valueNumeric="3"/></insert>
+        <insert tableName="skills"><column name="name" value="Плиточные работы"/><column name="category_id" valueNumeric="3"/></insert>
+        <insert tableName="skills"><column name="name" value="Электромонтаж"/><column name="category_id" valueNumeric="3"/></insert>
+
+        <!-- Навыки: Сад и огород -->
+        <insert tableName="skills"><column name="name" value="Покос травы"/><column name="category_id" valueNumeric="4"/></insert>
+        <insert tableName="skills"><column name="name" value="Посадка растений"/><column name="category_id" valueNumeric="4"/></insert>
+        <insert tableName="skills"><column name="name" value="Уборка снега"/><column name="category_id" valueNumeric="4"/></insert>
+        <insert tableName="skills"><column name="name" value="Обрезка деревьев"/><column name="category_id" valueNumeric="4"/></insert>
+
+        <!-- Навыки: Транспорт и авто -->
+        <insert tableName="skills"><column name="name" value="Ремонт авто"/><column name="category_id" valueNumeric="5"/></insert>
+        <insert tableName="skills"><column name="name" value="Мойка и химчистка"/><column name="category_id" valueNumeric="5"/></insert>
+        <insert tableName="skills"><column name="name" value="Автопомощь (эвакуатор, доставка топлива)"/><column name="category_id" valueNumeric="5"/></insert>
+
+        <!-- Навыки: IT и техника -->
+        <insert tableName="skills"><column name="name" value="Настройка компьютеров"/><column name="category_id" valueNumeric="6"/></insert>
+        <insert tableName="skills"><column name="name" value="Настройка Wi-Fi и оборудования"/><column name="category_id" valueNumeric="6"/></insert>
+        <insert tableName="skills"><column name="name" value="Мелкий ремонт техники"/><column name="category_id" valueNumeric="6"/></insert>
+
+        <!-- Навыки: Личные услуги -->
+        <insert tableName="skills"><column name="name" value="Репетиторство"/><column name="category_id" valueNumeric="7"/></insert>
+        <insert tableName="skills"><column name="name" value="Няня / сиделка"/><column name="category_id" valueNumeric="7"/></insert>
+        <insert tableName="skills"><column name="name" value="Помощь пожилым"/><column name="category_id" valueNumeric="7"/></insert>
+    </changeSet>
+
+</databaseChangeLog>
