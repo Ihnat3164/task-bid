@@ -2,8 +2,6 @@ package org.example.taskbid.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.taskbid.entity.Skill;
-import org.example.taskbid.entity.Profile;
 import org.example.taskbid.entity.enums.TaskStatus;
 
 import java.time.LocalDateTime;
@@ -11,10 +9,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"author", "requiredSkills"})
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

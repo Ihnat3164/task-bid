@@ -96,7 +96,9 @@ public class TaskService {
 
         Task task = taskRepository.findTaskById(id);
 
-        return TaskDto.builder()
+        log.info("Task: {}",task);
+
+        var tasks = TaskDto.builder()
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .status(task.getStatus())
@@ -104,6 +106,10 @@ public class TaskService {
                 .createdAt(task.getCreatedAt())
                 .requiredSkills(task.getRequiredSkills())
                 .build();
+
+        log.info("Task after mapping: {}", tasks);
+
+        return  tasks;
     }
 }
 
