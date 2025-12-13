@@ -2,6 +2,7 @@ package org.example.taskbid.repositiry;
 
 import org.example.taskbid.entity.Profile;
 import org.example.taskbid.entity.Task;
+import org.example.taskbid.entity.enums.TaskStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findAllByAuthor(Profile profile);
 
     Task findTaskById(Long id);
+
+    List<Task> findAllByStatus(TaskStatus status);
 }

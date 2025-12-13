@@ -28,8 +28,12 @@ public class JwtUtil {
     }
 
 
-    public String generateToken(String email) {
+    public String generateToken(String role, String email) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))

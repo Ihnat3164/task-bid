@@ -19,11 +19,20 @@ import org.example.taskbid.repositiry.UserRepository;
 import org.example.taskbid.component.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.example.taskbid.ml.MlRecommendationClient;
+import org.example.taskbid.dto.MlProfilePayload;
+import org.example.taskbid.dto.MlRecommendationRequest;
+import org.example.taskbid.dto.MlSkillPayload;
+import org.example.taskbid.dto.MlTaskPayload;
+import org.example.taskbid.entity.enums.Roles;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -36,6 +45,7 @@ public class TaskService {
     ProfileRepository profileRepository;
     UserRepository userRepository;
     JwtUtil jwtUtil;
+    MlRecommendationClient mlRecommendationClient;
 
     @Transactional
     public void createTask(CreateTaskRequest req, String token) {
@@ -96,9 +106,7 @@ public class TaskService {
 
         Task task = taskRepository.findTaskById(id);
 
-        log.info("Task: {}",task);
-
-        var tasks = TaskDto.builder()
+        return TaskDto.builder()
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .status(task.getStatus())
@@ -106,10 +114,104 @@ public class TaskService {
                 .createdAt(task.getCreatedAt())
                 .requiredSkills(task.getRequiredSkills())
                 .build();
+    }
 
-        log.info("Task after mapping: {}", tasks);
+    @Transactional(readOnly = true)
+    public List<TaskDto> recommendTasks(String token) {
+        String email = jwtUtil.extractEmail(token);
 
-        return  tasks;
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Profile profile = profileRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        if (!Roles.EXECUTOR.equals(profile.getRole())) {
+            throw new RuntimeException("Only executors can request recommendations");
+        }
+
+        List<Task> openTasks = taskRepository.findAllByStatus(TaskStatus.OPEN)
+                .stream()
+                .filter(task -> !Objects.equals(task.getAuthor().getId(), profile.getId()))
+                .toList();
+
+        log.info("Tasks: {}", openTasks);
+
+        MlRecommendationRequest request = MlRecommendationRequest.builder()
+                .executor(buildProfilePayload(profile))
+                .tasks(openTasks.stream().map(this::buildTaskPayload).toList())
+                .build();
+
+        log.info("Request ml: {}", request);
+        List<Long> recommendedIds = mlRecommendationClient.getRecommendations(request);
+        log.info("Реки ml: {}", recommendedIds);
+        Map<Long, Task> tasksById = openTasks.stream()
+                .collect(Collectors.toMap(Task::getId, task -> task));
+
+        Stream<Task> recommendedTasks = recommendedIds.isEmpty()
+                ? openTasks.stream()
+                : recommendedIds.stream()
+                .map(tasksById::get)
+                .filter(Objects::nonNull);
+
+        return recommendedTasks
+                .map(this::toTaskDto)
+                .toList();
+    }
+
+    private MlProfilePayload buildProfilePayload(Profile profile) {
+        List<MlSkillPayload> skills = Optional.ofNullable(profile.getSkills())
+                .orElse(List.of())
+                .stream()
+                .map(this::toSkillPayload)
+                .toList();
+
+        return MlProfilePayload.builder()
+                .id(profile.getId())
+                .city(profile.getCity())
+                .experience(profile.getExperience())
+                .workRadiusKm(profile.getWorkRadiusKm())
+                .skills(skills)
+                .build();
+    }
+
+    private MlTaskPayload buildTaskPayload(Task task) {
+        List<MlSkillPayload> skills = Optional.ofNullable(task.getRequiredSkills())
+                .orElse(List.of())
+                .stream()
+                .map(this::toSkillPayload)
+                .toList();
+
+        return MlTaskPayload.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .city(task.getCity())
+                .requiredSkills(skills)
+                .build();
+    }
+
+    private MlSkillPayload toSkillPayload(Skill skill) {
+        String categoryName = Optional.ofNullable(skill.getCategory())
+                .map(category -> category.getName())
+                .orElse(null);
+
+        return MlSkillPayload.builder()
+                .id(skill.getId())
+                .name(skill.getName())
+                .category(categoryName)
+                .build();
+    }
+
+    private TaskDto toTaskDto(Task task) {
+        return TaskDto.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .status(task.getStatus())
+                .city(task.getCity())
+                .createdAt(task.getCreatedAt())
+                .requiredSkills(task.getRequiredSkills())
+                .build();
     }
 }
 

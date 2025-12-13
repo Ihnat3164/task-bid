@@ -49,4 +49,15 @@ public class TaskController {
     public ResponseEntity<TaskDto> getTask(@RequestParam Long id) {
         return ResponseEntity.ok(taskService.getTask(id));
     }
+
+    @GetMapping("/recommendations")
+    public ResponseEntity<List<TaskDto>> getRecommendations(HttpServletRequest req) {
+        String authHeader = req.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String token = authHeader.substring(7);
+        return ResponseEntity.ok(taskService.recommendTasks(token));
+    }
 }
