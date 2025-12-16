@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="4-create-task-applications" author="ignat">
+
+        <createTable tableName="task_applications">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="executor_profile_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="message" type="TEXT"/>
+
+            <column name="created_at" type="TIMESTAMP"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="task_applications"
+                baseColumnNames="task_id"
+                referencedTableName="tasks"
+                referencedColumnNames="id"
+                constraintName="fk_task_application_task"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="task_applications"
+                baseColumnNames="executor_profile_id"
+                referencedTableName="profiles"
+                referencedColumnNames="id"
+                constraintName="fk_task_application_executor"
+                onDelete="CASCADE"/>
+
+        <addUniqueConstraint
+                tableName="task_applications"
+                columnNames="task_id, executor_profile_id"
+                constraintName="uq_task_application_unique"/>
+
+    </changeSet>
+
+    <changeSet id="4-add-executor-to-tasks" author="ignat">
+        <addColumn tableName="tasks">
+            <column name="executor_profile_id" type="UUID"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tasks"
+                baseColumnNames="executor_profile_id"
+                referencedTableName="profiles"
+                referencedColumnNames="id"
+                constraintName="fk_task_executor"/>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -13,4 +13,7 @@ public interface ProfileRepository extends JpaRepository<Profile, UUID> {
 
     Optional<Profile> findByUser(User user);
 
+    // альтернативно (и часто удобнее)
+    Optional<Profile> findByUser_Id(Long userId);
+
 }

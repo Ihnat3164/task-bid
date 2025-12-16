@@ -39,7 +39,10 @@ public class Task {
     @JoinColumn(name = "author_profile_id", nullable = false)
     private Profile author;
 
-    // необходимые навыки
+    @ManyToOne
+    @JoinColumn(name = "executor_profile_id")
+    private Profile executor;
+
     @ManyToMany
     @JoinTable(
             name = "task_skills",

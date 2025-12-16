@@ -8,5 +8,8 @@
     <include file="/db/migration/V1__init.xml"/>
     <include file="/db/migration/V2__init_categories_and_skills.xml"/>
     <include file="db/migration/V3__create_task_table.xml"/>
+    <include file="db/migration/V4__create_task_application_table.xml"/>
+    <include file="db/migration/V5__drop_unused_columns.xml"/>
+    <include file="db/migration/V6__add_price_field.xml"/>
 
 </databaseChangeLog>

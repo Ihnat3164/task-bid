@@ -27,6 +27,10 @@ public class JwtUtil {
         return extractEmail(token).equals(userDetails.getUsername());
     }
 
+    public String extractRole(String token) {
+        Object role = extractAllClaims(token).get("role");
+        return role != null ? role.toString() : null;
+    }
 
     public String generateToken(String role, String email) {
         Map<String, Object> claims = new HashMap<>();

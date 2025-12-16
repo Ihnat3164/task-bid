@@ -31,9 +31,7 @@ public class Profile {
     private Roles role;
 
     private String city;
-    private Integer experience;
     private String description;
-    private Integer workRadiusKm;
 
     @ManyToMany
     @JoinTable(

@@ -51,15 +51,25 @@ public class OnboardingService {
         }).collect(Collectors.toList());
     }
 
-    // проверка - может уже есть
     @Transactional
     public void onboardUser(OnboardingRequest req, String token) {
-
         User user = userRep.getUsersByEmail(jwtUtil.extractEmail(token));
 
-        Profile profile = userMapper.mapOnboardingDataToProfile(req, user);
-        log.info("Onboarding request received: {}", profile);
+        // ✅ находим существующий профиль по user_id, иначе создаём
+        Profile profile = profileRepository.findByUser(user)
+                .orElseGet(() -> {
+                    Profile p = new Profile();
+                    p.setId(UUID.randomUUID());
+                    p.setUser(user);
+                    return p;
+                });
+
+        // ✅ обновляем существующий профиль (НЕ создаём новый)
+        userMapper.applyOnboardingDataToProfile(profile, req);
+
         profileRepository.save(profile);
+        log.info("Onboarding saved: userId={}, profileId={}, role={}", user.getId(), profile.getId(), profile.getRole());
     }
+
 
 }

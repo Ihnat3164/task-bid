@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Удаляем message из task_applications -->
+    <changeSet id="5-drop-task-applications-message" author="ignat">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="task_applications" columnName="message"/>
+        </preConditions>
+
+        <dropColumn tableName="task_applications" columnName="message"/>
+    </changeSet>
+
+    <!-- Удаляем experience и work_radius_km из profiles -->
+    <changeSet id="5-drop-profiles-experience-radius" author="ignat">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="profiles" columnName="experience"/>
+                <columnExists tableName="profiles" columnName="work_radius_km"/>
+            </and>
+        </preConditions>
+
+        <dropColumn tableName="profiles" columnName="experience"/>
+        <dropColumn tableName="profiles" columnName="work_radius_km"/>
+    </changeSet>
+
+</databaseChangeLog>
