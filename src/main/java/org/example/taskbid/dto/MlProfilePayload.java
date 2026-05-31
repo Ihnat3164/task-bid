@@ -15,7 +15,18 @@ import java.util.UUID;
 public class MlProfilePayload {
     private UUID id;
     private String city;
+
+    /**
+     * @deprecated Not stored in the current Profile entity. Kept only for backward compatibility.
+     */
+    @Deprecated
     private Integer experience;
+
+    /**
+     * @deprecated Not stored in the current Profile entity. Kept only for backward compatibility.
+     */
+    @Deprecated
     private Integer workRadiusKm;
+
     private List<MlSkillPayload> skills;
 }

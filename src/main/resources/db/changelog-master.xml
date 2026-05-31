@@ -11,5 +11,8 @@
     <include file="db/migration/V4__create_task_application_table.xml"/>
     <include file="db/migration/V5__drop_unused_columns.xml"/>
     <include file="db/migration/V6__add_price_field.xml"/>
+    <include file="db/migration/V7__create_recommendation_impressions.xml"/>
+    <include file="db/migration/V8__create_task_view_events.xml"/>
+    <include file="db/migration/V9__create_task_reviews.xml"/>
 
 </databaseChangeLog>

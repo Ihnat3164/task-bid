@@ -15,4 +15,20 @@ public class MyApplicationDto {
     private String taskCity;
     private ApplicationStatus status;
     private LocalDateTime createdAt;
+
+    public MyApplicationDto(
+            Long applicationId,
+            Long taskId,
+            String taskTitle,
+            String taskCity,
+            ApplicationStatus status,
+            LocalDateTime createdAt
+    ) {
+        this.applicationId = applicationId;
+        this.taskId = taskId;
+        this.taskTitle = taskTitle;
+        this.taskCity = taskCity;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
 }

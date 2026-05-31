@@ -30,7 +30,7 @@ public class MlRecommendationClient {
     @Value("${ml.service.url:http://localhost:8000}")
     String mlServiceUrl;
 
-    public List<Long> getRecommendations(MlRecommendationRequest request) {
+    public MlRecommendationResponse getRecommendationResponse(MlRecommendationRequest request) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -44,11 +44,19 @@ public class MlRecommendationClient {
             );
 
             return Optional.ofNullable(response.getBody())
-                    .map(MlRecommendationResponse::getRecommendedTaskIds)
-                    .orElse(Collections.emptyList());
+                    .orElseGet(() -> MlRecommendationResponse.builder()
+                            .recommendedTaskIds(Collections.emptyList())
+                            .build());
         } catch (RestClientException ex) {
             log.warn("Failed to get recommendations from ML service: {}", ex.getMessage());
-            return Collections.emptyList();
+            return MlRecommendationResponse.builder()
+                    .recommendedTaskIds(Collections.emptyList())
+                    .build();
         }
+    }
+
+    public List<Long> getRecommendations(MlRecommendationRequest request) {
+        return Optional.ofNullable(getRecommendationResponse(request).getRecommendedTaskIds())
+                .orElse(Collections.emptyList());
     }
 }

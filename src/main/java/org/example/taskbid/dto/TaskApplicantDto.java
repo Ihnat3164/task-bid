@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class TaskApplicantDto {
     private Long applicationId;
     private UUID profileId;
@@ -18,6 +18,8 @@ public class TaskApplicantDto {
     private String description;
     private String city;
     private String price;
+    private Double averageRating;
+    private Long reviewsCount;
     private List<Skill> skills;
     private LocalDateTime createdAt;
 }

@@ -13,4 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MlRecommendationResponse {
     private List<Long> recommendedTaskIds;
+    private List<MlRecommendationItemDto> recommendations;
+    private String mode;
+    private String modelVersion;
+    private String scoreType;
 }

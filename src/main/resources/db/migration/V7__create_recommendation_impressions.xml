@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="7-create-recommendation-impressions" author="ignat">
+        <createTable tableName="recommendation_impressions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="executor_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="position" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="recommended_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="mode" type="VARCHAR(50)"/>
+
+            <column name="model_version" type="VARCHAR(100)"/>
+
+            <column name="score" type="DOUBLE PRECISION"/>
+
+            <column name="score_type" type="VARCHAR(100)"/>
+
+            <column name="reasons_json" type="TEXT"/>
+
+            <column name="request_id" type="VARCHAR(100)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="recommendation_impressions"
+                baseColumnNames="executor_id"
+                referencedTableName="profiles"
+                referencedColumnNames="id"
+                constraintName="fk_recommendation_impressions_executor"/>
+
+        <addForeignKeyConstraint
+                baseTableName="recommendation_impressions"
+                baseColumnNames="task_id"
+                referencedTableName="tasks"
+                referencedColumnNames="id"
+                constraintName="fk_recommendation_impressions_task"/>
+
+        <createIndex tableName="recommendation_impressions" indexName="idx_recommendation_impressions_executor_time">
+            <column name="executor_id"/>
+            <column name="recommended_at"/>
+        </createIndex>
+
+        <createIndex tableName="recommendation_impressions" indexName="idx_recommendation_impressions_task">
+            <column name="task_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

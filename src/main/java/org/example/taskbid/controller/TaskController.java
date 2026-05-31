@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.example.taskbid.dto.*;
 import org.example.taskbid.service.TaskService;
+import org.example.taskbid.service.TaskReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.List;
 public class TaskController {
 
     TaskService taskService;
+    TaskReviewService taskReviewService;
 
     @PostMapping("/tasks")
     public ResponseEntity<Void> createTask(HttpServletRequest req,
@@ -48,6 +50,7 @@ public class TaskController {
     @GetMapping("/task")
     public ResponseEntity<TaskDto> getTask(
             @RequestParam Long id,
+            @RequestParam(required = false) String source,
             HttpServletRequest req
     ) {
         String authHeader = req.getHeader("Authorization");
@@ -57,7 +60,7 @@ public class TaskController {
             token = authHeader.substring(7);
         }
 
-        return ResponseEntity.ok(taskService.getTask(id, token));
+        return ResponseEntity.ok(taskService.getTask(id, token, source));
     }
 
 
@@ -122,8 +125,6 @@ public class TaskController {
         }
         String token = authHeader.substring(7);
 
-        log.info("how much");
-
         return ResponseEntity.ok(taskService.getMyTasksApplicationsCounts(token));
     }
 
@@ -187,6 +188,21 @@ public class TaskController {
         String token = auth.substring(7);
         taskService.completeTask(taskId, token);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/tasks/{taskId}/review")
+    public ResponseEntity<TaskReviewResponse> createReview(
+            HttpServletRequest req,
+            @PathVariable Long taskId,
+            @RequestBody TaskReviewRequest request
+    ) {
+        String authHeader = req.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
+        String token = authHeader.substring(7);
+
+        return ResponseEntity.ok(taskReviewService.createReview(taskId, request, token));
     }
 
 }

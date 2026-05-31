@@ -7,10 +7,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
   liquibase:
     enabled: true
@@ -22,13 +22,14 @@ spring:
 
 logging:
   level:
-    org.example.taskbid.config.RestTemplateConfig: DEBUG
-    org.apache.http: DEBUG
+    org.example.taskbid.config.RestTemplateConfig: INFO
+    org.apache.http: WARN
 
 
 ml:
   service:
     url: http://localhost:8000
 
-
-
+app:
+  dev-seed:
+    enabled: true

@@ -56,18 +56,27 @@ public class UserMapper {
         profile.setCity(req.getCity());
         profile.setDescription(req.getDescription());
 
-        // 💡 гарантируем List<Long>
-        List<Long> ids = req.getSkillIds() == null
-                ? List.of()
-                : req.getSkillIds();
+        // гарантируем, что список есть
+        if (profile.getSkills() == null) {
+            profile.setSkills(new ArrayList<>());
+        }
 
-        // 💡 ЖЁСТКАЯ ТИПИЗАЦИЯ
+        // если не исполнитель — навыки не трогаем/очищаем (на твой выбор)
+        if (!"EXECUTOR".equals(req.getRole())) {
+            profile.getSkills().clear(); // чтобы у заказчика точно не было skills
+            return;
+        }
+
+        // для EXECUTOR: skillIds могут быть null/пустые
+        List<Long> ids = req.getSkillIds() == null ? List.of() : req.getSkillIds();
+
         List<Skill> skills = ids.isEmpty()
                 ? List.of()
                 : skillRepository.findAllById(ids);
 
         profile.getSkills().clear();
-        profile.getSkills().addAll(skills); // ✅ теперь компилируется
+        profile.getSkills().addAll(skills);
     }
+
 
 }

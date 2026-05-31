@@ -16,11 +16,16 @@ public class TaskDto {
     private String description;
     private String city;
     private TaskStatus status;
+    private boolean readyForCompletion;
     private List<Skill> requiredSkills;
     private LocalDateTime createdAt;
 
     private List<TaskApplicantDto> applicants;
 
     private TaskApplicantDto executor;
-}
 
+    private boolean currentUserApplied;
+    private boolean reviewAllowed;
+    private boolean reviewExists;
+    private TaskReviewResponse review;
+}

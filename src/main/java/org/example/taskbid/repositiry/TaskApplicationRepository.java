@@ -3,6 +3,7 @@ package org.example.taskbid.repositiry;
 import org.example.taskbid.dto.MyApplicationDto;
 import org.example.taskbid.dto.TaskApplicationsCountDto;
 import org.example.taskbid.entity.TaskApplication;
+import org.example.taskbid.entity.enums.ApplicationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -49,8 +50,15 @@ public interface TaskApplicationRepository extends JpaRepository<TaskApplication
     """)
     List<MyApplicationDto> findMyApplications(UUID executorId);
 
-    void deleteAllByTask_IdAndIdNot(Long taskId, Long idToKeep);
+    @Modifying
+    @Query("""
+        update TaskApplication ta
+        set ta.status = :status
+        where ta.task.id = :taskId
+          and ta.id <> :idToKeep
+          and ta.status = org.example.taskbid.entity.enums.ApplicationStatus.PENDING
+    """)
+    void updatePendingStatusesByTaskIdAndIdNot(Long taskId, Long idToKeep, ApplicationStatus status);
 
     Optional<TaskApplication> findByTask_IdAndExecutor_Id(Long taskId, UUID executorId);
 }
-

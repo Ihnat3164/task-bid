@@ -37,8 +37,7 @@ public class OnboardingController {
 
         String token = authHeader.substring(7);
 
-        log.info("Onboarding request received: {}", request);
-        log.info("JWT token extracted: {}", token);
+        log.debug("Onboarding request received: {}", request);
         onboardingService.onboardUser(request, token);
         return ResponseEntity.ok().build();
     }

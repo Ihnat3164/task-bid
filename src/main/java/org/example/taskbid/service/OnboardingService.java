@@ -55,21 +55,19 @@ public class OnboardingService {
     public void onboardUser(OnboardingRequest req, String token) {
         User user = userRep.getUsersByEmail(jwtUtil.extractEmail(token));
 
-        // ✅ находим существующий профиль по user_id, иначе создаём
         Profile profile = profileRepository.findByUser(user)
                 .orElseGet(() -> {
                     Profile p = new Profile();
-                    p.setId(UUID.randomUUID());
                     p.setUser(user);
+                    p.setSkills(new ArrayList<>());
                     return p;
                 });
 
-        // ✅ обновляем существующий профиль (НЕ создаём новый)
         userMapper.applyOnboardingDataToProfile(profile, req);
 
-        profileRepository.save(profile);
-        log.info("Onboarding saved: userId={}, profileId={}, role={}", user.getId(), profile.getId(), profile.getRole());
+        profileRepository.saveAndFlush(profile); // чтобы сразу увидеть, что реально вставилось
     }
+
 
 
 }

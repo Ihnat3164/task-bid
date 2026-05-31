@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="8-create-task-view-events" author="ignat">
+        <createTable tableName="task_view_events">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="viewer_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="viewed_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="source" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="request_id" type="VARCHAR(100)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="task_view_events"
+                baseColumnNames="viewer_id"
+                referencedTableName="profiles"
+                referencedColumnNames="id"
+                constraintName="fk_task_view_events_viewer"/>
+
+        <addForeignKeyConstraint
+                baseTableName="task_view_events"
+                baseColumnNames="task_id"
+                referencedTableName="tasks"
+                referencedColumnNames="id"
+                constraintName="fk_task_view_events_task"/>
+
+        <createIndex tableName="task_view_events" indexName="idx_task_view_events_viewer_time">
+            <column name="viewer_id"/>
+            <column name="viewed_at"/>
+        </createIndex>
+
+        <createIndex tableName="task_view_events" indexName="idx_task_view_events_task">
+            <column name="task_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
